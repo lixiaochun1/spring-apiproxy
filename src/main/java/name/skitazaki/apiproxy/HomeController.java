@@ -37,6 +37,9 @@ public class HomeController {
 	 */
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
+		if (locale == null) {
+			locale = Locale.getDefault();
+		}
 		logger.info("Welcome home! the client locale is " + locale.toString());
 
 		Date date = new Date();
@@ -45,7 +48,9 @@ public class HomeController {
 
 		String formattedDate = dateFormat.format(date);
 
-		model.addAttribute("serverTime", formattedDate);
+		if (model != null) {
+			model.addAttribute("serverTime", formattedDate);
+		}
 
 		return "home";
 	}
@@ -66,7 +71,11 @@ public class HomeController {
 	@ResponseBody
 	public Configuration proxy(@PathVariable String server,
 			HttpServletRequest request) {
-		logger.info(request.getQueryString());
+		if (request == null) {
+			logger.warn("'request' object is not given.");
+		} else {
+			logger.info("Query: " + request.getQueryString());
+		}
 		Map<String, String> vars = new HashMap<String, String>();
 		vars.put("core", "wikipedia");
 		// XXX: Retrieve by the "server" variable.
