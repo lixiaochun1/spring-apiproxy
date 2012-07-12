@@ -6,9 +6,13 @@ import name.skitazaki.apiproxy.model.Configuration;
 
 public class SimpleConfigurationManager implements ConfigurationManager {
 
+	private List<Configuration> configurations;
+
 	public List<Configuration> getConfigurations() {
-		// TODO Auto-generated method stub
-		return null;
+		return configurations;
 	}
 
+	public void setConfigurations(List<Configuration> configurations) {
+		this.configurations = configurations;
+	}
 }

@@ -3,9 +3,11 @@ package name.skitazaki.apiproxy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.util.Arrays;
 import java.util.List;
 
 import name.skitazaki.apiproxy.model.Configuration;
+import name.skitazaki.apiproxy.service.SimpleConfigurationManager;
 
 import org.junit.Test;
 
@@ -21,15 +23,24 @@ public class HomeControllerTest {
 	@Test
 	public void servers() {
 		HomeController c = new HomeController();
+		SimpleConfigurationManager manager = new SimpleConfigurationManager();
+		Configuration c1 = new Configuration();
+		c1.setName("solr");
+		c1.setUrl("http://localhost:8983/solr");
+		Configuration c2 = new Configuration();
+		c2.setName("python");
+		c2.setUrl("http://localhost:8000");
+		manager.setConfigurations(Arrays.asList(c1, c2));
+		c.setConfigurationManager(manager);
 		List<Configuration> servers = c.servers();
 		assertNotNull(servers);
 		assertEquals(2, servers.size());
-		Configuration c1 = servers.get(0);
-		assertEquals("solr", c1.getName());
-		assertEquals("http://localhost:8983/solr", c1.getUrl());
-		Configuration c2 = servers.get(1);
-		assertEquals("python", c2.getName());
-		assertEquals("http://localhost:8000", c2.getUrl());
+		Configuration r1 = servers.get(0);
+		assertEquals("solr", r1.getName());
+		assertEquals("http://localhost:8983/solr", r1.getUrl());
+		Configuration r2 = servers.get(1);
+		assertEquals("python", r2.getName());
+		assertEquals("http://localhost:8000", r2.getUrl());
 	}
 
 	@Test

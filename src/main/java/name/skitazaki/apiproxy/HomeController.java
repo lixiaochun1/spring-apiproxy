@@ -1,7 +1,6 @@
 package name.skitazaki.apiproxy;
 
 import java.text.DateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -11,9 +10,11 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import name.skitazaki.apiproxy.model.Configuration;
+import name.skitazaki.apiproxy.service.ConfigurationManager;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,6 +32,8 @@ public class HomeController {
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(HomeController.class);
+
+	private ConfigurationManager manager;
 
 	/**
 	 * Simply selects the home view to render by returning its name.
@@ -58,13 +61,7 @@ public class HomeController {
 	@RequestMapping(value = "/servers", method = RequestMethod.GET)
 	@ResponseBody
 	public List<Configuration> servers() {
-		Configuration c1 = new Configuration();
-		c1.setName("solr");
-		c1.setUrl("http://localhost:8983/solr");
-		Configuration c2 = new Configuration();
-		c2.setName("python");
-		c2.setUrl("http://localhost:8000");
-		return Arrays.asList(c1, c2);
+		return manager.getConfigurations();
 	}
 
 	@RequestMapping(value = "/proxy/{server}", method = RequestMethod.GET)
@@ -91,5 +88,10 @@ public class HomeController {
 		c1.setName("solr");
 		c1.setUrl("http://localhost:8983/solr/{core}");
 		return c1;
+	}
+
+	@Autowired
+	public void setConfigurationManager(ConfigurationManager manager) {
+		this.manager = manager;
 	}
 }
