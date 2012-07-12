@@ -26,10 +26,10 @@ public class HomeControllerTest {
 		assertEquals(2, servers.size());
 		Configuration c1 = servers.get(0);
 		assertEquals("solr", c1.getName());
-		assertEquals("http://localhost:8983/solr", c1.getServer());
+		assertEquals("http://localhost:8983/solr", c1.getUrl());
 		Configuration c2 = servers.get(1);
 		assertEquals("python", c2.getName());
-		assertEquals("http://localhost:8000", c2.getServer());
+		assertEquals("http://localhost:8000", c2.getUrl());
 	}
 
 	@Test
@@ -38,6 +38,6 @@ public class HomeControllerTest {
 		Configuration proxy = c.proxy(null, null);
 		assertNotNull(proxy);
 		assertEquals("solr", proxy.getName());
-		assertEquals("http://localhost:8983/solr/{core}", proxy.getServer());
+		assertEquals("http://localhost:8983/solr/{core}", proxy.getUrl());
 	}
 }

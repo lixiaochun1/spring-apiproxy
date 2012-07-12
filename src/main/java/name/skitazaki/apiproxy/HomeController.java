@@ -60,10 +60,10 @@ public class HomeController {
 	public List<Configuration> servers() {
 		Configuration c1 = new Configuration();
 		c1.setName("solr");
-		c1.setServer("http://localhost:8983/solr");
+		c1.setUrl("http://localhost:8983/solr");
 		Configuration c2 = new Configuration();
 		c2.setName("python");
-		c2.setServer("http://localhost:8000");
+		c2.setUrl("http://localhost:8000");
 		return Arrays.asList(c1, c2);
 	}
 
@@ -89,7 +89,7 @@ public class HomeController {
 		}
 		Configuration c1 = new Configuration();
 		c1.setName("solr");
-		c1.setServer("http://localhost:8983/solr/{core}");
+		c1.setUrl("http://localhost:8983/solr/{core}");
 		return c1;
 	}
 }

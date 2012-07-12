@@ -1,23 +1,27 @@
 package name.skitazaki.apiproxy.model;
 
-public class Configuration {
+import java.io.Serializable;
+
+public class Configuration implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	private String name;
-	private String server;
+	private String url;
 
 	public String getName() {
 		return name;
 	}
 
-	public String getServer() {
-		return server;
+	public String getUrl() {
+		return url;
 	}
 
 	public void setName(String name) {
 		this.name = name;
 	}
 
-	public void setServer(String server) {
-		this.server = server;
+	public void setUrl(String url) {
+		this.url = url;
 	}
 }
