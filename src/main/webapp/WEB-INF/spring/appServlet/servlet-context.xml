@@ -43,4 +43,8 @@
 		<beans:property name="url" value="http://localhost:8000" />
 	</beans:bean>
 
+	<beans:bean id="messageSource"
+		class="org.springframework.context.support.ResourceBundleMessageSource">
+		<beans:property name="basename" value="messages" />
+	</beans:bean>
 </beans:beans>
