@@ -10,8 +10,17 @@
 		<fmt:message key="heading" />
 	</h1>
 	<p>
-		<fmt:message key="greeting" />
+		<fmt:message key="greeting">
+			<fmt:param value="${serverTime}" />
+		</fmt:message>
 	</p>
-	<p>The time on the server is ${serverTime}.</p>
+	<ul>
+		<li><a href="<c:url value="servers"/>"><fmt:message
+					key="servers" /></a></li>
+		<li><a href="<c:url value="proxy/solr"/>"><fmt:message
+					key="proxy">
+					<fmt:param value="Solr" />
+				</fmt:message></a></li>
+	</ul>
 </body>
 </html>
