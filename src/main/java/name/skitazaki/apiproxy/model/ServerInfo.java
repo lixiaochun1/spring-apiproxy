@@ -2,7 +2,7 @@ package name.skitazaki.apiproxy.model;
 
 import java.io.Serializable;
 
-public class Configuration implements Serializable {
+public class ServerInfo implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 

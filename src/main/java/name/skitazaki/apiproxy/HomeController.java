@@ -9,8 +9,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import name.skitazaki.apiproxy.model.Configuration;
-import name.skitazaki.apiproxy.service.ConfigurationManager;
+import name.skitazaki.apiproxy.model.ServerInfo;
+import name.skitazaki.apiproxy.service.ServerInfoManager;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +33,7 @@ public class HomeController {
 	private static final Logger logger = LoggerFactory
 			.getLogger(HomeController.class);
 
-	private ConfigurationManager manager;
+	private ServerInfoManager manager;
 
 	/**
 	 * Simply selects the home view to render by returning its name.
@@ -60,13 +60,13 @@ public class HomeController {
 
 	@RequestMapping(value = "/servers", method = RequestMethod.GET)
 	@ResponseBody
-	public List<Configuration> servers() {
+	public List<ServerInfo> servers() {
 		return manager.getConfigurations();
 	}
 
 	@RequestMapping(value = "/proxy/{server}", method = RequestMethod.GET)
 	@ResponseBody
-	public Configuration proxy(@PathVariable String server,
+	public ServerInfo proxy(@PathVariable String server,
 			HttpServletRequest request) {
 		if (request == null) {
 			logger.warn("'request' object is not given.");
@@ -84,14 +84,14 @@ public class HomeController {
 		} catch (RestClientException e) {
 			logger.error("{} - {}", e.getMessage(), url);
 		}
-		Configuration c1 = new Configuration();
+		ServerInfo c1 = new ServerInfo();
 		c1.setName("solr");
 		c1.setUrl("http://localhost:8983/solr/{core}");
 		return c1;
 	}
 
 	@Autowired
-	public void setConfigurationManager(ConfigurationManager manager) {
+	public void setConfigurationManager(ServerInfoManager manager) {
 		this.manager = manager;
 	}
 }

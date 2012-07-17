@@ -7,18 +7,18 @@ import static org.junit.Assert.assertNull;
 import java.util.Arrays;
 import java.util.List;
 
-import name.skitazaki.apiproxy.model.Configuration;
+import name.skitazaki.apiproxy.model.ServerInfo;
 
 import org.junit.Before;
 import org.junit.Test;
 
-public class ConfigurationManagerTest {
+public class ServerInfoManagerTest {
 
-	private ConfigurationManager manager;
+	private ServerInfoManager manager;
 
 	@Before
 	public void setUp() throws Exception {
-		manager = new SimpleConfigurationManager();
+		manager = new SimpleServerInfoManager();
 	}
 
 	@Test
@@ -28,21 +28,21 @@ public class ConfigurationManagerTest {
 
 	@Test
 	public void testGetConfigurationsWithTwoData() {
-		Configuration c1 = new Configuration();
+		ServerInfo c1 = new ServerInfo();
 		c1.setName("solr");
 		c1.setUrl("http://localhost:8983/solr");
-		Configuration c2 = new Configuration();
+		ServerInfo c2 = new ServerInfo();
 		c2.setName("python");
 		c2.setUrl("http://localhost:8000");
-		((SimpleConfigurationManager) manager).setConfigurations(Arrays.asList(
+		((SimpleServerInfoManager) manager).setConfigurations(Arrays.asList(
 				c1, c2));
-		List<Configuration> configs = manager.getConfigurations();
+		List<ServerInfo> configs = manager.getConfigurations();
 		assertNotNull(configs);
 		assertEquals(2, configs.size());
-		Configuration r1 = configs.get(0);
+		ServerInfo r1 = configs.get(0);
 		assertEquals("solr", r1.getName());
 		assertEquals("http://localhost:8983/solr", r1.getUrl());
-		Configuration r2 = configs.get(1);
+		ServerInfo r2 = configs.get(1);
 		assertEquals("python", r2.getName());
 		assertEquals("http://localhost:8000", r2.getUrl());
 	}

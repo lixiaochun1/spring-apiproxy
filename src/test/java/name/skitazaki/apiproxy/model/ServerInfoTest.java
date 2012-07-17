@@ -6,13 +6,13 @@ import static org.junit.Assert.assertNull;
 import org.junit.Before;
 import org.junit.Test;
 
-public class ConfigurationTest {
+public class ServerInfoTest {
 
-	private Configuration configuration;
+	private ServerInfo configuration;
 
 	@Before
 	public void setUp() throws Exception {
-		configuration = new Configuration();
+		configuration = new ServerInfo();
 	}
 
 	@Test
