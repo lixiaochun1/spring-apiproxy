@@ -5,7 +5,7 @@
 
 	<!-- the test application context definition for the jdbc based tests -->
 
-	<bean id="productDao" class="name.skitazaki.apiproxy.repository.JdbcServerInfoDao">
+	<bean id="serverInfoDao" class="name.skitazaki.apiproxy.repository.JdbcServerInfoDao">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 
@@ -16,6 +16,7 @@
 		<property name="username" value="${jdbc.username}" />
 		<property name="password" value="${jdbc.password}" />
 	</bean>
+
 	<bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">

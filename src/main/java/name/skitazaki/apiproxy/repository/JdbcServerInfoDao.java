@@ -14,8 +14,8 @@ public class JdbcServerInfoDao extends NamedParameterJdbcDaoSupport implements
 		ServerInfoDao {
 
 	public List<ServerInfo> getServers() {
-		List<ServerInfo> s = getJdbcTemplate().query("SELECT * FROM products",
-				new ServerInfoMapper());
+		List<ServerInfo> s = getJdbcTemplate().query(
+				"SELECT * FROM server_info", new ServerInfoMapper());
 		if (s != null) {
 			logger.info("Fetched " + s.size() + " item(s).");
 		}
@@ -25,9 +25,11 @@ public class JdbcServerInfoDao extends NamedParameterJdbcDaoSupport implements
 	public void saveServer(ServerInfo s) {
 		logger.info("Save server info: " + s.getName());
 		int updated = getNamedParameterJdbcTemplate()
-				.update("UPDATE products SET description = :description WHERE id = :id",
-						new MapSqlParameterSource().addValue("description",
-								s.getName()).addValue("id", s.getId()));
+				.update("UPDATE server_info SET name = :name, url = :url WHERE id = :id",
+						new MapSqlParameterSource()
+								.addValue("name", s.getName())
+								.addValue("url", s.getUrl())
+								.addValue("id", s.getId()));
 		logger.info("Rows affected: " + updated);
 	}
 
@@ -36,9 +38,8 @@ public class JdbcServerInfoDao extends NamedParameterJdbcDaoSupport implements
 		public ServerInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
 			ServerInfo s = new ServerInfo();
 			s.setId(rs.getInt("id"));
-			// XXX: Modify table schema.
-			s.setName("");
-			s.setUrl("");
+			s.setName(rs.getString("name"));
+			s.setUrl(rs.getString("url"));
 			return s;
 		}
 	}

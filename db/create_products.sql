@@ -1,6 +1,6 @@
-CREATE TABLE products (
+CREATE TABLE server_info (
   id INTEGER NOT NULL PRIMARY KEY,
-  description varchar(255),
-  price decimal(15,2)
+  name varchar(255),
+  url varchar(255)
 );
-CREATE INDEX products_description ON products(description);
+CREATE INDEX server_info_name ON server_info(name);

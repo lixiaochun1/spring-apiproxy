@@ -1,3 +1,3 @@
-INSERT INTO products (id, description, price) values(1, 'Lamp', 5.78);
-INSERT INTO products (id, description, price) values(2, 'Table', 75.29);
-INSERT INTO products (id, description, price) values(3, 'Chair', 22.81);
+INSERT INTO server_info (id, name, url) values(1, 'solr', 'http://localhost:8983/solr');
+INSERT INTO server_info (id, name, url) values(2, 'python', 'http://localhost:8000');
+INSERT INTO server_info (id, name, url) values(3, 'nodejs', 'http://localhost:4000');
