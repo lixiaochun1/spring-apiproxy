@@ -30,26 +30,6 @@
 		p:driverClassName="${jdbc.driverClassName}" p:url="${jdbc.url}"
 		p:username="${jdbc.username}" p:password="${jdbc.password}" />
 
-	<beans:bean id="configManager"
-		class="name.skitazaki.apiproxy.service.SimpleServerInfoManager">
-		<beans:property name="configurations">
-			<beans:list>
-				<beans:ref bean="config1" />
-				<beans:ref bean="config2" />
-			</beans:list>
-		</beans:property>
-	</beans:bean>
-
-	<beans:bean id="config1" class="name.skitazaki.apiproxy.model.ServerInfo">
-		<beans:property name="name" value="solr" />
-		<beans:property name="url" value="http://localhost:8983/solr" />
-	</beans:bean>
-
-	<beans:bean id="config2" class="name.skitazaki.apiproxy.model.ServerInfo">
-		<beans:property name="name" value="python" />
-		<beans:property name="url" value="http://localhost:8000" />
-	</beans:bean>
-
 	<beans:bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
 		p:location="classpath:jdbc.properties" />

@@ -22,4 +22,19 @@
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
 		p:dataSource-ref="dataSource" />
 
+	<bean id="serverInfoManager" class="name.skitazaki.apiproxy.service.SimpleServerInfoManager">
+		<property name="configurations">
+			<list>
+				<ref bean="config1" />
+				<ref bean="config2" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="config1" class="name.skitazaki.apiproxy.model.ServerInfo"
+		p:name="solr" p:url="http://localhost:8983/solr" />
+
+	<bean id="config2" class="name.skitazaki.apiproxy.model.ServerInfo"
+		p:name="python" p:url="http://localhost:8000" />
+
 </beans>
