@@ -23,6 +23,19 @@
 
 	<context:component-scan base-package="name.skitazaki.apiproxy" />
 
+	<beans:bean id="serverInfoDao"
+		class="name.skitazaki.apiproxy.repository.JdbcServerInfoDao">
+		<beans:property name="dataSource" ref="dataSource" />
+	</beans:bean>
+
+	<beans:bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<beans:property name="driverClassName" value="${jdbc.driverClassName}" />
+		<beans:property name="url" value="${jdbc.url}" />
+		<beans:property name="username" value="${jdbc.username}" />
+		<beans:property name="password" value="${jdbc.password}" />
+	</beans:bean>
+
 	<beans:bean id="configManager"
 		class="name.skitazaki.apiproxy.service.SimpleServerInfoManager">
 		<beans:property name="configurations">
@@ -41,6 +54,20 @@
 	<beans:bean id="config2" class="name.skitazaki.apiproxy.model.ServerInfo">
 		<beans:property name="name" value="python" />
 		<beans:property name="url" value="http://localhost:8000" />
+	</beans:bean>
+
+	<beans:bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<beans:property name="locations">
+			<beans:list>
+				<beans:value>classpath:jdbc.properties</beans:value>
+			</beans:list>
+		</beans:property>
+	</beans:bean>
+
+	<beans:bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<beans:property name="dataSource" ref="dataSource" />
 	</beans:bean>
 
 	<beans:bean id="messageSource"
