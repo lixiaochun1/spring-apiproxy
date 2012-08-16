@@ -8,5 +8,7 @@ public interface ServerInfoDao {
 
 	List<ServerInfo> getServers();
 
+	ServerInfo getServer(String name);
+
 	void saveServer(ServerInfo s);
 }

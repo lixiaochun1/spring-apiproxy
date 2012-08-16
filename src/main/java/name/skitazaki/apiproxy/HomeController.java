@@ -68,15 +68,22 @@ public class HomeController {
 	@ResponseBody
 	public ServerInfo proxy(@PathVariable String server,
 			HttpServletRequest request) {
+		String query = null;
 		if (request == null) {
 			logger.warn("'request' object is not given.");
 		} else {
-			logger.info("Query: " + request.getQueryString());
+			query = request.getQueryString();
+			logger.info("Query: " + query);
+		}
+		ServerInfo info = manager.getConfiguration(server);
+		if (info == null) {
+			// XXX: Set status code, 404.
+			return info;
 		}
 		Map<String, String> vars = new HashMap<String, String>();
 		vars.put("core", "wikipedia");
-		// XXX: Retrieve by the "server" variable.
-		String url = "http://localhost:8983/solr/{core}";
+		String url = info.getUrl();
+		url += query == null ? "" : ("?" + query);
 		RestTemplate template = new RestTemplate();
 		try {
 			String ret = template.getForObject(url, String.class, vars);
@@ -84,10 +91,7 @@ public class HomeController {
 		} catch (RestClientException e) {
 			logger.error("{} - {}", e.getMessage(), url);
 		}
-		ServerInfo c1 = new ServerInfo();
-		c1.setName("solr");
-		c1.setUrl("http://localhost:8983/solr/{core}");
-		return c1;
+		return info;
 	}
 
 	@Autowired

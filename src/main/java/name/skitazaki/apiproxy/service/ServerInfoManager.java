@@ -7,4 +7,6 @@ import name.skitazaki.apiproxy.model.ServerInfo;
 public interface ServerInfoManager {
 
 	List<ServerInfo> getConfigurations();
+
+	ServerInfo getConfiguration(String name);
 }

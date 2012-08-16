@@ -22,6 +22,14 @@ public class JdbcServerInfoDao extends NamedParameterJdbcDaoSupport implements
 		return s;
 	}
 
+	public ServerInfo getServer(String name) {
+		ServerInfo s = getNamedParameterJdbcTemplate().queryForObject(
+				"SELECT * FROM server_info WHERE name = :name",
+				new MapSqlParameterSource().addValue("name", name),
+				new ServerInfoMapper());
+		return s;
+	}
+
 	public void saveServer(ServerInfo s) {
 		logger.info("Save server info: " + s.getName());
 		int updated = getNamedParameterJdbcTemplate()
@@ -43,4 +51,5 @@ public class JdbcServerInfoDao extends NamedParameterJdbcDaoSupport implements
 			return s;
 		}
 	}
+
 }
