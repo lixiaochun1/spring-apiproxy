@@ -22,7 +22,7 @@
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
 		p:dataSource-ref="dataSource" />
 
-	<bean id="serverInfoManager" class="name.skitazaki.apiproxy.service.SimpleServerInfoManager">
+	<bean id="testManager" class="name.skitazaki.apiproxy.service.DummyServerInfoManager">
 		<property name="configurations">
 			<list>
 				<ref bean="config1" />

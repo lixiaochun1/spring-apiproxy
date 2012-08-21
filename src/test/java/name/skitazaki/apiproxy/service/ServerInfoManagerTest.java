@@ -18,7 +18,7 @@ public class ServerInfoManagerTest {
 
 	@Before
 	public void setUp() throws Exception {
-		manager = new SimpleServerInfoManager();
+		manager = new DummyServerInfoManager();
 	}
 
 	@Test
@@ -34,8 +34,8 @@ public class ServerInfoManagerTest {
 		ServerInfo c2 = new ServerInfo();
 		c2.setName("python");
 		c2.setUrl("http://localhost:8000");
-		((SimpleServerInfoManager) manager).setConfigurations(Arrays.asList(
-				c1, c2));
+		((DummyServerInfoManager) manager).setConfigurations(Arrays.asList(c1,
+				c2));
 		List<ServerInfo> configs = manager.getConfigurations();
 		assertNotNull(configs);
 		assertEquals(2, configs.size());

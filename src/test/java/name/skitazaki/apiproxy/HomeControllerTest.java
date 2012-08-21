@@ -3,15 +3,25 @@ package name.skitazaki.apiproxy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import java.util.Arrays;
 import java.util.List;
 
 import name.skitazaki.apiproxy.model.ServerInfo;
-import name.skitazaki.apiproxy.service.SimpleServerInfoManager;
+import name.skitazaki.apiproxy.service.ServerInfoManager;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+@ContextConfiguration(locations = "classpath:test-context.xml")
+@RunWith(SpringJUnit4ClassRunner.class)
 public class HomeControllerTest {
+
+	@Autowired
+	@Qualifier("testManager")
+	ServerInfoManager serverInfoManager;
 
 	@Test
 	public void home() {
@@ -23,15 +33,7 @@ public class HomeControllerTest {
 	@Test
 	public void servers() {
 		HomeController c = new HomeController();
-		SimpleServerInfoManager manager = new SimpleServerInfoManager();
-		ServerInfo c1 = new ServerInfo();
-		c1.setName("solr");
-		c1.setUrl("http://localhost:8983/solr");
-		ServerInfo c2 = new ServerInfo();
-		c2.setName("python");
-		c2.setUrl("http://localhost:8000");
-		manager.setConfigurations(Arrays.asList(c1, c2));
-		c.setConfigurationManager(manager);
+		c.setConfigurationManager(serverInfoManager);
 		List<ServerInfo> servers = c.servers();
 		assertNotNull(servers);
 		assertEquals(2, servers.size());
@@ -46,9 +48,11 @@ public class HomeControllerTest {
 	@Test
 	public void proxy() {
 		HomeController c = new HomeController();
-		ServerInfo proxy = c.proxy(null, null);
+		c.setConfigurationManager(serverInfoManager);
+		// XXX: Mock HTTP request.
+		ServerInfo proxy = c.proxy("solr", null);
 		assertNotNull(proxy);
 		assertEquals("solr", proxy.getName());
-		assertEquals("http://localhost:8983/solr/{core}", proxy.getUrl());
+		assertEquals("http://localhost:8983/solr", proxy.getUrl());
 	}
 }

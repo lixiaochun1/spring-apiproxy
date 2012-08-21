@@ -11,21 +11,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class SimpleServerInfoManager implements ServerInfoManager {
 
-	private List<ServerInfo> configurations;
-
 	@Autowired
 	private ServerInfoDao serverInfoDao;
 
 	public List<ServerInfo> getConfigurations() {
-		if (serverInfoDao == null) {
-			return configurations;
-		}
 		// XXX: implement cache support.
 		return serverInfoDao.getServers();
-	}
-
-	public void setConfigurations(List<ServerInfo> configurations) {
-		this.configurations = configurations;
 	}
 
 	public void setServerInfoDao(ServerInfoDao serverInfoDao) {
@@ -34,14 +25,6 @@ public class SimpleServerInfoManager implements ServerInfoManager {
 
 	public ServerInfo getConfiguration(String name) {
 		if (name == null || name.length() == 0) {
-			return null;
-		}
-		if (serverInfoDao == null) {
-			for (ServerInfo s : configurations) {
-				if (name.equals(s.getName())) {
-					return s;
-				}
-			}
 			return null;
 		}
 		return serverInfoDao.getServer(name);
