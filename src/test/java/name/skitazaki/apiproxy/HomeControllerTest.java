@@ -2,6 +2,7 @@ package name.skitazaki.apiproxy;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import java.util.List;
 
@@ -50,9 +51,14 @@ public class HomeControllerTest {
 		HomeController c = new HomeController();
 		c.setConfigurationManager(serverInfoManager);
 		// XXX: Mock HTTP request.
-		ServerInfo proxy = c.proxy("solr", null);
-		assertNotNull(proxy);
-		assertEquals("solr", proxy.getName());
-		assertEquals("http://localhost:8983/solr", proxy.getUrl());
+		String ret = c.proxy("solr", null);
+		assertNull(ret);
+	}
+
+	@Test(expected = ResourceNotFoundException.class)
+	public void proxyNotFound() {
+		HomeController c = new HomeController();
+		c.setConfigurationManager(serverInfoManager);
+		c.proxy("not_found", null);
 	}
 }

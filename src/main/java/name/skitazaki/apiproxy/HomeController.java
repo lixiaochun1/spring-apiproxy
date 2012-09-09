@@ -66,8 +66,7 @@ public class HomeController {
 
 	@RequestMapping(value = "/proxy/{server}", method = RequestMethod.GET)
 	@ResponseBody
-	public ServerInfo proxy(@PathVariable String server,
-			HttpServletRequest request) {
+	public String proxy(@PathVariable String server, HttpServletRequest request) {
 		String query = null;
 		if (request == null) {
 			logger.warn("'request' object is not given.");
@@ -77,8 +76,7 @@ public class HomeController {
 		}
 		ServerInfo info = manager.getConfiguration(server);
 		if (info == null) {
-			// XXX: Set status code, 404.
-			return info;
+			throw new ResourceNotFoundException();
 		}
 		Map<String, String> vars = new HashMap<String, String>();
 		vars.put("core", "wikipedia");
@@ -87,11 +85,11 @@ public class HomeController {
 		RestTemplate template = new RestTemplate();
 		try {
 			String ret = template.getForObject(url, String.class, vars);
-			logger.info(ret);
+			return ret;
 		} catch (RestClientException e) {
 			logger.error("{} - {}", e.getMessage(), url);
 		}
-		return info;
+		return null;
 	}
 
 	@Autowired
