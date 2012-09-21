@@ -6,6 +6,7 @@ import java.util.List;
 
 import name.skitazaki.apiproxy.model.ServerInfo;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +26,13 @@ public class JdbcServerInfoDaoTest extends
 
 	@Before
 	public void setUp() throws Exception {
-		super.deleteFromTables(new String[] { "server_info" });
+		super.executeSqlScript("file:db/create-ddl.sql", true);
 		super.executeSqlScript("file:db/load_data.sql", true);
+	}
+
+	@After
+	public void tearDown() throws Exception {
+		super.deleteFromTables(new String[] { "server_info" });
 	}
 
 	@Test
