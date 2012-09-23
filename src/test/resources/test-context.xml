@@ -9,32 +9,30 @@
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 
+	<bean id="serverInfoManager" class="name.skitazaki.apiproxy.service.DummyServerInfoManager" />
+	<bean id="ctrl" class="name.skitazaki.apiproxy.HomeController" />
+
 	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource"
-		p:driverClassName="${jdbc.driverClassName}" p:url="${jdbc.url}"
-		p:username="${jdbc.username}" p:password="${jdbc.password}" />
-
-	<bean id="propertyConfigurer"
-		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
-		p:location="classpath:jdbc.properties" />
+		p:driverClassName="org.hsqldb.jdbcDriver" p:url="jdbc:hsqldb:mem:apiproxy"
+		p:username="sa" p:password="" />
 
 	<bean id="transactionManager"
-		class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
-		p:dataSource-ref="dataSource" />
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager"
+		p:sessionFactory-ref="sessionFactory" />
 
-	<bean id="testManager" class="name.skitazaki.apiproxy.service.DummyServerInfoManager">
-		<property name="configurations">
-			<list>
-				<ref bean="config1" />
-				<ref bean="config2" />
-			</list>
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean"
+		p:dataSource-ref="dataSource" p:packagesToScan="name.skitazaki.apiproxy.model">
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.format_sql">true</prop>
+				<prop key="hibernate.generate_statistics">true</prop>
+				<prop key="hibernate.hbm2ddl.auto">create-drop</prop>
+			</props>
 		</property>
 	</bean>
-
-	<bean id="config1" class="name.skitazaki.apiproxy.model.ServerInfo"
-		p:name="solr" p:url="http://localhost:8983/solr" />
-
-	<bean id="config2" class="name.skitazaki.apiproxy.model.ServerInfo"
-		p:name="python" p:url="http://localhost:8000" />
 
 </beans>

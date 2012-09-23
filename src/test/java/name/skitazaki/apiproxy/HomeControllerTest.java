@@ -7,12 +7,10 @@ import static org.junit.Assert.assertNull;
 import java.util.List;
 
 import name.skitazaki.apiproxy.model.ServerInfo;
-import name.skitazaki.apiproxy.service.ServerInfoManager;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -21,21 +19,17 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public class HomeControllerTest {
 
 	@Autowired
-	@Qualifier("testManager")
-	ServerInfoManager serverInfoManager;
+	private HomeController ctrl;
 
 	@Test
 	public void home() {
-		HomeController c = new HomeController();
-		String home = c.home(null, null);
+		String home = ctrl.home(null, null);
 		assertEquals("home", home);
 	}
 
 	@Test
 	public void servers() {
-		HomeController c = new HomeController();
-		c.setConfigurationManager(serverInfoManager);
-		List<ServerInfo> servers = c.servers();
+		List<ServerInfo> servers = ctrl.servers();
 		assertNotNull(servers);
 		assertEquals(2, servers.size());
 		ServerInfo r1 = servers.get(0);
@@ -48,17 +42,13 @@ public class HomeControllerTest {
 
 	@Test
 	public void proxy() {
-		HomeController c = new HomeController();
-		c.setConfigurationManager(serverInfoManager);
 		// XXX: Mock HTTP request.
-		String ret = c.proxy("solr", null);
+		String ret = ctrl.proxy("solr", null);
 		assertNull(ret);
 	}
 
 	@Test(expected = ResourceNotFoundException.class)
 	public void proxyNotFound() {
-		HomeController c = new HomeController();
-		c.setConfigurationManager(serverInfoManager);
-		c.proxy("not_found", null);
+		ctrl.proxy("not_found", null);
 	}
 }

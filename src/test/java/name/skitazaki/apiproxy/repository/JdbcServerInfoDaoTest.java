@@ -1,12 +1,11 @@
 package name.skitazaki.apiproxy.repository;
 
-import static org.junit.Assert.assertEquals;
-
+import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.*;
 import java.util.List;
 
 import name.skitazaki.apiproxy.model.ServerInfo;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,23 +25,28 @@ public class JdbcServerInfoDaoTest extends
 
 	@Before
 	public void setUp() throws Exception {
-		super.executeSqlScript("file:db/create-ddl.sql", true);
 		super.executeSqlScript("file:db/load_data.sql", true);
 	}
 
-	@After
-	public void tearDown() throws Exception {
-		super.deleteFromTables(new String[] { "server_info" });
-	}
-
 	@Test
-	public void testGetServerInfoList() {
+	public void getServers() {
 		List<ServerInfo> servers = serverInfoDao.getServers();
 		assertEquals("wrong number of products?", 3, servers.size());
 	}
 
 	@Test
-	public void testSaveServerInfo() {
+	public void getServer() {
+		ServerInfo server1 = serverInfoDao.getServer("solr");
+		assertThat(server1.getName(), is("solr"));
+		assertThat(server1.getUrl(), is("http://localhost:8983/solr"));
+
+		ServerInfo server2 = serverInfoDao.getServer("python");
+		assertThat(server2.getName(), is("python"));
+		assertThat(server2.getUrl(), is("http://localhost:8000"));
+	}
+
+	@Test
+	public void saveServer() {
 		List<ServerInfo> servers = serverInfoDao.getServers();
 		for (ServerInfo p : servers) {
 			p.setUrl("http://localhost");
