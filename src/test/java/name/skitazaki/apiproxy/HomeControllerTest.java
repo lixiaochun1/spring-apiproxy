@@ -8,6 +8,10 @@ import java.util.List;
 
 import name.skitazaki.apiproxy.model.ServerInfo;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +24,25 @@ public class HomeControllerTest {
 
 	@Autowired
 	private HomeController ctrl;
+
+	@Autowired
+	private SessionFactory sessionFactory;
+
+	@Before
+	public void createSampleData() {
+		Session session = sessionFactory.openSession();
+		session.getTransaction().begin();
+		session.createQuery("DELETE ServerInfo").executeUpdate();
+		ServerInfo c1 = new ServerInfo();
+		c1.setName("solr");
+		c1.setUrl("http://localhost:8983/solr");
+		ServerInfo c2 = new ServerInfo();
+		c2.setName("python");
+		c2.setUrl("http://localhost:8000");
+		session.persist(c1);
+		session.persist(c2);
+		session.getTransaction().commit();
+	}
 
 	@Test
 	public void home() {

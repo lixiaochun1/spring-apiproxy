@@ -9,6 +9,7 @@ import name.skitazaki.apiproxy.model.ServerInfo;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 
@@ -16,6 +17,7 @@ import org.springframework.test.context.junit4.AbstractTransactionalJUnit4Spring
 public class JdbcServerInfoDaoTest extends
 		AbstractTransactionalJUnit4SpringContextTests {
 
+	@Qualifier("jdbcDao")
 	private ServerInfoDao serverInfoDao;
 
 	@Autowired
@@ -25,6 +27,7 @@ public class JdbcServerInfoDaoTest extends
 
 	@Before
 	public void setUp() throws Exception {
+		super.deleteFromTables("server_info");
 		super.executeSqlScript("file:db/load_data.sql", true);
 	}
 

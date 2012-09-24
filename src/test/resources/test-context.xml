@@ -1,25 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:p="http://www.springframework.org/schema/p" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd">
 
 	<!-- the test application context definition for the jdbc based tests -->
 
-	<bean id="serverInfoDao" class="name.skitazaki.apiproxy.repository.JdbcServerInfoDao">
+	<bean id="jdbcDao" class="name.skitazaki.apiproxy.repository.JdbcServerInfoDao">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 
-	<bean id="serverInfoManager" class="name.skitazaki.apiproxy.service.DummyServerInfoManager" />
+	<bean id="serverInfoDao"
+		class="name.skitazaki.apiproxy.repository.HibernateServerInfoDao" />
+
+	<bean id="serverInfoManager" class="name.skitazaki.apiproxy.service.SimpleServerInfoManager" />
 	<bean id="ctrl" class="name.skitazaki.apiproxy.HomeController" />
 
 	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource"
 		p:driverClassName="org.hsqldb.jdbcDriver" p:url="jdbc:hsqldb:mem:apiproxy"
 		p:username="sa" p:password="" />
-
-	<bean id="transactionManager"
-		class="org.springframework.orm.hibernate4.HibernateTransactionManager"
-		p:sessionFactory-ref="sessionFactory" />
 
 	<bean id="sessionFactory"
 		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean"
@@ -34,5 +36,21 @@
 			</props>
 		</property>
 	</bean>
+
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager"
+		p:sessionFactory-ref="sessionFactory" />
+
+	<aop:config>
+		<aop:advisor pointcut="execution(* *..ServerInfoManager.*(..))"
+			advice-ref="txAdvice" />
+	</aop:config>
+
+	<tx:advice id="txAdvice">
+		<tx:attributes>
+			<tx:method name="save*" />
+			<tx:method name="*" read-only="true" />
+		</tx:attributes>
+	</tx:advice>
 
 </beans>
