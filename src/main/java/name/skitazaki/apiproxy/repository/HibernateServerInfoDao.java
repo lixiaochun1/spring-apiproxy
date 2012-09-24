@@ -4,9 +4,10 @@ import java.util.List;
 
 import name.skitazaki.apiproxy.model.ServerInfo;
 
-import org.hibernate.Query;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -17,16 +18,18 @@ public class HibernateServerInfoDao implements ServerInfoDao {
 	private SessionFactory sessionFactory;
 
 	public List<ServerInfo> getServers() {
-		return sessionFactory.getCurrentSession()
-				.createQuery("from ServerInfo").list();
+		Session session = sessionFactory.getCurrentSession();
+		Criteria criteria = session.createCriteria(ServerInfo.class);
+		@SuppressWarnings("unchecked")
+		List<ServerInfo> list = criteria.list();
+		return list;
 	}
 
 	public ServerInfo getServer(String name) {
 		Session session = sessionFactory.getCurrentSession();
-		Query query = session
-				.createQuery("from ServerInfo where name = :name");
-		query.setString("name", name);
-		Object result = query.uniqueResult();
+		Criteria criteria = session.createCriteria(ServerInfo.class);
+		criteria.add(Restrictions.eq("name", name));
+		Object result = criteria.uniqueResult();
 		if (result == null) {
 			// XXX: LOG ME
 			return null;
@@ -35,5 +38,11 @@ public class HibernateServerInfoDao implements ServerInfoDao {
 	}
 
 	public void saveServer(ServerInfo s) {
+		if (s == null) {
+			return;
+
+		}
+		Session session = sessionFactory.getCurrentSession();
+		session.persist(s);
 	}
 }
