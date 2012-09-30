@@ -7,6 +7,7 @@ import java.util.List;
 
 import name.skitazaki.apiproxy.model.ServerInfo;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,6 +31,11 @@ public class SimpleServerInfoManagerTest extends
 	@Before
 	public void setUp() throws Exception {
 		super.executeSqlScript("file:db/load_data.sql", true);
+	}
+
+	@After
+	public void tearDown() throws Exception {
+		super.deleteFromTables("server_info");
 	}
 
 	@Test

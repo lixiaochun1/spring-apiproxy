@@ -1,65 +1,68 @@
 package name.skitazaki.apiproxy;
 
-import static org.junit.Assert.assertEquals;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
 
 import java.util.List;
 
 import name.skitazaki.apiproxy.model.ServerInfo;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
-@ContextConfiguration(locations = "classpath:test-context.xml")
 @RunWith(SpringJUnit4ClassRunner.class)
-public class HomeControllerTest {
+@ContextConfiguration(locations = "classpath:test-context.xml")
+@TransactionConfiguration
+@Transactional
+public class HomeControllerTest extends
+		AbstractTransactionalJUnit4SpringContextTests {
 
 	@Autowired
 	private HomeController ctrl;
 
-	@Autowired
-	private SessionFactory sessionFactory;
-
 	@Before
-	public void createSampleData() {
-		Session session = sessionFactory.openSession();
-		session.getTransaction().begin();
-		session.createQuery("DELETE ServerInfo").executeUpdate();
-		ServerInfo c1 = new ServerInfo();
-		c1.setName("solr");
-		c1.setUrl("http://localhost:8983/solr");
-		ServerInfo c2 = new ServerInfo();
-		c2.setName("python");
-		c2.setUrl("http://localhost:8000");
-		session.persist(c1);
-		session.persist(c2);
-		session.getTransaction().commit();
+	public void setUp() throws Exception {
+		super.executeSqlScript("file:db/load_data.sql", true);
+	}
+
+	@After
+	public void tearDown() throws Exception {
+		super.deleteFromTables("server_info");
 	}
 
 	@Test
 	public void home() {
 		String home = ctrl.home(null, null);
-		assertEquals("home", home);
+		assertThat(home, is("home"));
 	}
 
 	@Test
 	public void servers() {
 		List<ServerInfo> servers = ctrl.servers();
 		assertNotNull(servers);
-		assertEquals(2, servers.size());
+		assertThat(servers.size(), is(3));
 		ServerInfo r1 = servers.get(0);
-		assertEquals("solr", r1.getName());
-		assertEquals("http://localhost:8983/solr", r1.getUrl());
+		assertThat(r1.getId(), is(1));
+		assertThat(r1.getName(), is("solr"));
+		assertThat(r1.getUrl(), is("http://localhost:8983/solr"));
 		ServerInfo r2 = servers.get(1);
-		assertEquals("python", r2.getName());
-		assertEquals("http://localhost:8000", r2.getUrl());
+		assertThat(r2.getId(), is(2));
+		assertThat(r2.getName(), is("python"));
+		assertThat(r2.getUrl(), is("http://localhost:8000"));
+		ServerInfo r3 = servers.get(2);
+		assertThat(r3.getId(), is(3));
+		assertThat(r3.getName(), is("nodejs"));
+		assertThat(r3.getUrl(), is("http://localhost:4000"));
 	}
 
 	@Test
