@@ -6,12 +6,6 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd">
 
-	<!-- the test application context definition for the jdbc based tests -->
-
-	<bean id="jdbcDao" class="name.skitazaki.apiproxy.repository.JdbcServerInfoDao">
-		<property name="dataSource" ref="dataSource" />
-	</bean>
-
 	<bean id="serverInfoDao"
 		class="name.skitazaki.apiproxy.repository.HibernateServerInfoDao" />
 

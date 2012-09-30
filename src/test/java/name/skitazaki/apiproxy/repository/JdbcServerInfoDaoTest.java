@@ -6,29 +6,38 @@ import java.util.List;
 
 import name.skitazaki.apiproxy.model.ServerInfo;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
-@ContextConfiguration(locations = "classpath:test-context.xml")
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration
+@TransactionConfiguration
+@Transactional
 public class JdbcServerInfoDaoTest extends
 		AbstractTransactionalJUnit4SpringContextTests {
 
 	@Qualifier("jdbcDao")
-	private ServerInfoDao serverInfoDao;
-
 	@Autowired
-	public void setServerInfoDao(ServerInfoDao serverInfoDao) {
-		this.serverInfoDao = serverInfoDao;
-	}
+	private ServerInfoDao serverInfoDao;
 
 	@Before
 	public void setUp() throws Exception {
-		super.deleteFromTables("server_info");
+		super.executeSqlScript("file:db/create-ddl.sql", false);
 		super.executeSqlScript("file:db/load_data.sql", true);
+	}
+
+	@After
+	public void tearDown() throws Exception {
+		super.deleteFromTables("server_info");
 	}
 
 	@Test
