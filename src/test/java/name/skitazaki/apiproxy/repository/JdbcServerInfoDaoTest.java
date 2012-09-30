@@ -43,7 +43,7 @@ public class JdbcServerInfoDaoTest extends
 	@Test
 	public void getServers() {
 		List<ServerInfo> servers = serverInfoDao.getServers();
-		assertEquals("wrong number of products?", 3, servers.size());
+		assertThat("wrong number of servers?", servers.size(), is(5));
 	}
 
 	@Test
@@ -67,7 +67,7 @@ public class JdbcServerInfoDaoTest extends
 
 		List<ServerInfo> updatedServers = serverInfoDao.getServers();
 		for (ServerInfo p : updatedServers) {
-			assertEquals("wrong server url?", "http://localhost", p.getUrl());
+			assertThat("wrong server url?", p.getUrl(), is("http://localhost"));
 		}
 	}
 }

@@ -15,14 +15,17 @@ public class ServerInfo implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "ID")
+	@Column
 	@GeneratedValue
 	private int id;
 
-	@Column(name = "NAME")
+	@Column
 	private String name;
 
-	@Column(name = "URL")
+	@Column
+	private String kind;
+
+	@Column
 	private String url;
 
 	public int getId() {
@@ -37,12 +40,20 @@ public class ServerInfo implements Serializable {
 		return name;
 	}
 
-	public String getUrl() {
-		return url;
-	}
-
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getKind() {
+		return kind;
+	}
+
+	public void setKind(String kind) {
+		this.kind = kind;
+	}
+
+	public String getUrl() {
+		return url;
 	}
 
 	public void setUrl(String url) {

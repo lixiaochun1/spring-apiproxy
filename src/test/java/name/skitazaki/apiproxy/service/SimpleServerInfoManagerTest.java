@@ -69,15 +69,18 @@ public class SimpleServerInfoManagerTest extends
 	public void all() {
 		List<ServerInfo> list = manager.getConfigurations();
 		assertThat(list, notNullValue());
-		assertThat(list.size(), is(3));
+		assertThat(list.size(), is(5));
 		assertThat(list.get(0).getId(), is(1));
 		assertThat(list.get(0).getName(), is("solr"));
+		assertThat(list.get(0).getKind(), is("search"));
 		assertThat(list.get(0).getUrl(), is("http://localhost:8983/solr"));
 		assertThat(list.get(1).getId(), is(2));
 		assertThat(list.get(1).getName(), is("python"));
+		assertThat(list.get(1).getKind(), is("static"));
 		assertThat(list.get(1).getUrl(), is("http://localhost:8000"));
 		assertThat(list.get(2).getId(), is(3));
 		assertThat(list.get(2).getName(), is("nodejs"));
+		assertThat(list.get(2).getKind(), is("webapp"));
 		assertThat(list.get(2).getUrl(), is("http://localhost:4000"));
 	}
 }

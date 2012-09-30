@@ -50,7 +50,7 @@ public class HomeControllerTest extends
 	public void servers() {
 		List<ServerInfo> servers = ctrl.servers();
 		assertNotNull(servers);
-		assertThat(servers.size(), is(3));
+		assertThat(servers.size(), is(5));
 		ServerInfo r1 = servers.get(0);
 		assertThat(r1.getId(), is(1));
 		assertThat(r1.getName(), is("solr"));
