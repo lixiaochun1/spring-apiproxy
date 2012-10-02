@@ -33,7 +33,7 @@ public class HomeControllerTest extends
 
 	@Before
 	public void setUp() throws Exception {
-		super.executeSqlScript("file:db/load_data.sql", true);
+		super.executeSqlScript("file:db/test-data.sql", true);
 	}
 
 	@After
@@ -51,7 +51,7 @@ public class HomeControllerTest extends
 	public void servers() {
 		List<ServerInfo> servers = ctrl.servers();
 		assertNotNull(servers);
-		assertThat(servers.size(), is(5));
+		assertThat(servers.size(), is(6));
 		ServerInfo r1 = servers.get(0);
 		assertThat(r1.getId(), is(1));
 		assertThat(r1.getName(), is("solr"));
@@ -64,6 +64,11 @@ public class HomeControllerTest extends
 		assertThat(r3.getId(), is(3));
 		assertThat(r3.getName(), is("nodejs"));
 		assertThat(r3.getUrl(), is("http://localhost:4000"));
+		ServerInfo r6 = servers.get(5);
+		assertThat(r6.getId(), is(6));
+		assertThat(r6.getName(), is("wikipedia"));
+		assertThat(r6.getUrl(), is("http://localhost:8983/solr/wikipedia"));
+		assertThat(r6.getDefaults(), is("wt=json"));
 	}
 
 	@Test

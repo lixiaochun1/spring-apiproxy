@@ -30,7 +30,7 @@ public class SimpleServerInfoManagerTest extends
 
 	@Before
 	public void setUp() throws Exception {
-		super.executeSqlScript("file:db/load_data.sql", true);
+		super.executeSqlScript("file:db/test-data.sql", true);
 	}
 
 	@After
@@ -69,7 +69,7 @@ public class SimpleServerInfoManagerTest extends
 	public void all() {
 		List<ServerInfo> list = manager.getConfigurations();
 		assertThat(list, notNullValue());
-		assertThat(list.size(), is(5));
+		assertThat(list.size(), is(6));
 		assertThat(list.get(0).getId(), is(1));
 		assertThat(list.get(0).getName(), is("solr"));
 		assertThat(list.get(0).getKind(), is("search"));

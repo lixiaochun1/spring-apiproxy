@@ -31,8 +31,8 @@ public class JdbcServerInfoDaoTest extends
 
 	@Before
 	public void setUp() throws Exception {
-		super.executeSqlScript("file:db/create-ddl.sql", false);
-		super.executeSqlScript("file:db/load_data.sql", true);
+		super.executeSqlScript("file:db/schema.sql", false);
+		super.executeSqlScript("file:db/test-data.sql", true);
 	}
 
 	@After
@@ -43,7 +43,7 @@ public class JdbcServerInfoDaoTest extends
 	@Test
 	public void getServers() {
 		List<ServerInfo> servers = serverInfoDao.getServers();
-		assertThat("wrong number of servers?", servers.size(), is(5));
+		assertThat("wrong number of servers?", servers.size(), is(6));
 	}
 
 	@Test
@@ -51,10 +51,12 @@ public class JdbcServerInfoDaoTest extends
 		ServerInfo server1 = serverInfoDao.getServer("solr");
 		assertThat(server1.getName(), is("solr"));
 		assertThat(server1.getUrl(), is("http://localhost:8983/solr"));
+		assertThat(server1.getDefaults(), nullValue());
 
 		ServerInfo server2 = serverInfoDao.getServer("python");
 		assertThat(server2.getName(), is("python"));
 		assertThat(server2.getUrl(), is("http://localhost:8000"));
+		assertThat(server2.getDefaults(), nullValue());
 	}
 
 	@Test

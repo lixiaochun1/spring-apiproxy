@@ -28,6 +28,9 @@ public class ServerInfo implements Serializable {
 	@Column
 	private String url;
 
+	@Column
+	private String defaults;
+
 	public int getId() {
 		return id;
 	}
@@ -58,6 +61,14 @@ public class ServerInfo implements Serializable {
 
 	public void setUrl(String url) {
 		this.url = url;
+	}
+
+	public String getDefaults() {
+		return defaults;
+	}
+
+	public void setDefaults(String defaults) {
+		this.defaults = defaults;
 	}
 
 }

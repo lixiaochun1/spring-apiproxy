@@ -6,6 +6,8 @@ import static org.springframework.test.web.client.match.RequestMatchers.method;
 import static org.springframework.test.web.client.match.RequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.ResponseCreators.withSuccess;
 
+import name.skitazaki.apiproxy.model.ServerInfo;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -36,7 +38,6 @@ public class HttpRequestProxyTest {
 		@Bean
 		public RestTemplate restTemplate() {
 			RestTemplate restTemplate = new RestTemplate();
-			// set properties, etc.
 			return restTemplate;
 		}
 
@@ -53,16 +54,51 @@ public class HttpRequestProxyTest {
 	}
 
 	@Test
-	public void test() {
+	public void queryStringIsNull() {
+		String url = "http://localhost:8983/solr";
+		HttpRequestProxy proxy = new HttpRequestProxy(restTemplate);
 		String responseBody = "{\"name\" : \"Ludwig van Beethoven\", \"someDouble\" : \"1.6035\"}";
 		this.mockServer
-				.expect(requestTo("/composers/42"))
+				.expect(requestTo(url))
 				.andExpect(method(HttpMethod.GET))
 				.andRespond(
 						withSuccess(responseBody, MediaType.APPLICATION_JSON));
-		// XXX: Implement test logic.
-		String object = restTemplate.getForObject("/composers/{id}", String.class, 42);
-		assertThat(object, notNullValue());
+		ServerInfo info = new ServerInfo();
+		info.setUrl(url);
+		String ret = proxy.proxy(info, null);
+		assertThat(ret, is(responseBody));
+	}
+
+	@Test
+	public void queryStringIsEmpty() {
+		String url = "http://localhost:8983/solr";
+		HttpRequestProxy proxy = new HttpRequestProxy(restTemplate);
+		String responseBody = "{\"name\" : \"Ludwig van Beethoven\", \"someDouble\" : \"1.6035\"}";
+		this.mockServer
+				.expect(requestTo(url))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(
+						withSuccess(responseBody, MediaType.APPLICATION_JSON));
+		ServerInfo info = new ServerInfo();
+		info.setUrl(url);
+		String ret = proxy.proxy(info, "");
+		assertThat(ret, is(responseBody));
+	}
+
+	@Test
+	public void queryStringIsSearchWord() {
+		String url = "http://localhost:8983/solr";
+		HttpRequestProxy proxy = new HttpRequestProxy(restTemplate);
+		String responseBody = "{\"name\" : \"Ludwig van Beethoven\", \"someDouble\" : \"1.6035\"}";
+		this.mockServer
+				.expect(requestTo(url + "?q=spring"))
+				.andExpect(method(HttpMethod.GET))
+				.andRespond(
+						withSuccess(responseBody, MediaType.APPLICATION_JSON));
+		ServerInfo info = new ServerInfo();
+		info.setUrl(url);
+		String ret = proxy.proxy(info, "q=spring");
+		assertThat(ret, is(responseBody));
 	}
 
 }

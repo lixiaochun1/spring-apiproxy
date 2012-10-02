@@ -27,7 +27,7 @@
 
 	<target name="createTables">
 		<echo message="CREATE TABLES USING: ${db.driver} ${db.url}" />
-		<sql driver="${db.driver}" url="${db.url}" userid="${db.user}" password="${db.pw}" onerror="continue" src="db/create-ddl.sql">
+		<sql driver="${db.driver}" url="${db.url}" userid="${db.user}" password="${db.pw}" onerror="continue" src="db/schema.sql">
 			<classpath refid="master-classpath" />
 		</sql>
 	</target>
@@ -44,7 +44,7 @@
 
 	<target name="loadData">
 		<echo message="LOAD DATA USING: ${db.driver} ${db.url}" />
-		<sql driver="${db.driver}" url="${db.url}" userid="${db.user}" password="${db.pw}" onerror="continue" src="db/load_data.sql">
+		<sql driver="${db.driver}" url="${db.url}" userid="${db.user}" password="${db.pw}" onerror="continue" src="db/test-data.sql">
 			<classpath refid="master-classpath" />
 		</sql>
 	</target>
