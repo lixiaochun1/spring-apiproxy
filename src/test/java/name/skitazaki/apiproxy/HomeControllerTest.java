@@ -14,6 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -67,13 +68,14 @@ public class HomeControllerTest extends
 
 	@Test
 	public void proxy() {
-		// XXX: Mock HTTP request.
-		String ret = ctrl.proxy("solr", null);
+		MockHttpServletRequest request = new MockHttpServletRequest();
+		String ret = ctrl.proxy("solr", request);
 		assertNull(ret);
 	}
 
 	@Test(expected = ResourceNotFoundException.class)
 	public void proxyNotFound() {
-		ctrl.proxy("not_found", null);
+		MockHttpServletRequest request = new MockHttpServletRequest();
+		ctrl.proxy("not_found", request);
 	}
 }

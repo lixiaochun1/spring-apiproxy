@@ -7,6 +7,7 @@
 		class="name.skitazaki.apiproxy.repository.HibernateServerInfoDao" />
 
 	<bean id="serverInfoManager" class="name.skitazaki.apiproxy.service.SimpleServerInfoManager" />
+	<bean id="proxy" class="name.skitazaki.apiproxy.service.HttpRequestProxy" />
 	<bean id="ctrl" class="name.skitazaki.apiproxy.HomeController" />
 
 	<bean id="dataSource"
@@ -31,5 +32,15 @@
 	<bean id="transactionManager"
 		class="org.springframework.orm.hibernate4.HibernateTransactionManager"
 		p:sessionFactory-ref="sessionFactory" />
+
+	<bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
+		<property name="messageConverters">
+			<list>
+				<bean id="jsonConverter"
+					class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"
+					p:supportedMediaTypes="application/json" />
+			</list>
+		</property>
+	</bean>
 
 </beans>

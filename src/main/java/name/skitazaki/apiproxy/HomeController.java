@@ -2,14 +2,13 @@ package name.skitazaki.apiproxy;
 
 import java.text.DateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
 import name.skitazaki.apiproxy.model.ServerInfo;
+import name.skitazaki.apiproxy.service.HttpRequestProxy;
 import name.skitazaki.apiproxy.service.ServerInfoManager;
 
 import org.slf4j.Logger;
@@ -22,8 +21,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
 
 /**
  * Handles requests for the application home page.
@@ -36,6 +33,9 @@ public class HomeController {
 
 	@Autowired
 	private ServerInfoManager manager;
+
+	@Autowired
+	private HttpRequestProxy proxy;
 
 	/**
 	 * Simply selects the home view to render by returning its name.
@@ -69,29 +69,13 @@ public class HomeController {
 	@RequestMapping(value = "/proxy/{server}", method = RequestMethod.GET)
 	@ResponseBody
 	public String proxy(@PathVariable String server, HttpServletRequest request) {
-		String query = null;
-		if (request == null) {
-			logger.warn("'request' object is not given.");
-		} else {
-			query = request.getQueryString();
-			logger.info("Query: " + query);
-		}
+		String query = request.getQueryString();
+		logger.info("Query: " + query);
 		ServerInfo info = manager.getConfiguration(server);
 		if (info == null) {
 			throw new ResourceNotFoundException();
 		}
-		Map<String, String> vars = new HashMap<String, String>();
-		vars.put("core", "wikipedia");
-		String url = info.getUrl();
-		url += query == null ? "" : ("?" + query);
-		RestTemplate template = new RestTemplate();
-		try {
-			String ret = template.getForObject(url, String.class, vars);
-			return ret;
-		} catch (RestClientException e) {
-			logger.error("{} - {}", e.getMessage(), url);
-		}
-		return null;
+		return proxy.proxy(info, query);
 	}
 
 	@ExceptionHandler(ResourceNotFoundException.class)
