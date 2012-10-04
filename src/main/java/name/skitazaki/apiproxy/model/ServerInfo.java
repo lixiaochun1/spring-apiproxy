@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "server_info")
@@ -20,16 +21,22 @@ public class ServerInfo implements Serializable {
 	private int id;
 
 	@Column
+	@NotNull
 	private String name;
 
 	@Column
+	@NotNull
 	private String kind;
 
 	@Column
+	@NotNull
 	private String url;
 
 	@Column
 	private String defaults;
+
+	@Column
+	private String responseClass;
 
 	public int getId() {
 		return id;
@@ -69,6 +76,14 @@ public class ServerInfo implements Serializable {
 
 	public void setDefaults(String defaults) {
 		this.defaults = defaults;
+	}
+
+	public String getResponseClass() {
+		return responseClass;
+	}
+
+	public void setConverter(String responseClass) {
+		this.responseClass = responseClass;
 	}
 
 }

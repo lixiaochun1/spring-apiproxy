@@ -4,6 +4,7 @@ CREATE TABLE server_info (
   name varchar(255) NOT NULL,
   kind varchar(31) NOT NULL,
   url varchar(255) NOT NULL,
-  defaults varchar(255)
+  defaults varchar(255),
+  responseClass varchar(255)
 );
 CREATE INDEX server_info_name ON server_info(name);

@@ -34,6 +34,7 @@ public class HttpRequestProxy {
 		url += q;
 		try {
 			String ret = restTemplate.getForObject(url, String.class);
+			//info.getResponseClass();
 			return ret;
 		} catch (RestClientException e) {
 			logger.error("{} - {}", e.getMessage(), url);

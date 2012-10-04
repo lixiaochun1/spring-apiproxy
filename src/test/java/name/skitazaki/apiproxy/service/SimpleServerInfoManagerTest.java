@@ -63,6 +63,10 @@ public class SimpleServerInfoManagerTest extends
 		assertThat(info.getId(), is(1));
 		assertThat(info.getName(), is("solr"));
 		assertThat(info.getUrl(), is("http://localhost:8983/solr"));
+		assertThat(info.getKind(), is("search"));
+		assertThat(info.getDefaults(), nullValue());
+		assertThat(info.getResponseClass(),
+				is("name.skitazaki.apiproxy.model.SolrResponse"));
 	}
 
 	@Test
@@ -78,6 +82,8 @@ public class SimpleServerInfoManagerTest extends
 		assertThat(list.get(1).getName(), is("python"));
 		assertThat(list.get(1).getKind(), is("static"));
 		assertThat(list.get(1).getUrl(), is("http://localhost:8000"));
+		assertThat(list.get(1).getDefaults(), nullValue());
+		assertThat(list.get(1).getResponseClass(), nullValue());
 		assertThat(list.get(2).getId(), is(3));
 		assertThat(list.get(2).getName(), is("nodejs"));
 		assertThat(list.get(2).getKind(), is("webapp"));
